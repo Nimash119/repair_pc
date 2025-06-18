@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Computer Repair</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="overlay">
+    <header>
+      <h2 id="title">Ремонт компьютеров</h2>
+      <div>
+        <input type="file" id="avatarInput" style="display:none" />
+        <img src="https://www.w3schools.com/howto/img_avatar.png" class="avatar" id="avatarImg" onclick="document.getElementById('avatarInput').click()" />
+        <button class="login-btn" onclick="loginWithGoogle()">Войти через Google</button>
+      </div>
+    </header>
+
+    <div class="language-switcher">
+      <select id="languageSelect" onchange="changeLanguage()">
+        <option value="ru">Русский</option>
+        <option value="uk">Українська</option>
+        <option value="en">English</option>
+        <option value="pl">Polski</option>
+      </select>
+    </div>
+
+    <h1 id="welcomeText">Добро пожаловать в наш сервис</h1>
+
+    <div class="comment-section">
+      <input type="text" id="phoneInput" placeholder="Ваш номер телефона..." />
+      <textarea id="commentInput" rows="4" placeholder="Оставьте комментарий или опишите проблему..."></textarea>
+      <button onclick="postComment()">Отправить</button>
+      <div id="commentsContainer"></div>
+    </div>
+  </div>
+
+  <script>
+    const avatarInput = document.getElementById('avatarInput');
+    const avatarImg = document.getElementById('avatarImg');
+
+    avatarInput.addEventListener('change', function () {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          avatarImg.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    function loginWithGoogle() {
+      alert('Функция входа через Google ещё не реализована.');
+    }
+
+    function postComment() {
+      const phone = document.getElementById('phoneInput').value;
+      const commentText = document.getElementById('commentInput').value;
+      if (commentText.trim() !== '') {
+        const commentEl = document.createElement('div');
+        commentEl.className = 'comment';
+        commentEl.innerHTML = `<strong>Телефон:</strong> ${phone}<br>${commentText}`;
+        document.getElementById('commentsContainer').appendChild(commentEl);
+        document.getElementById('commentInput').value = '';
+        document.getElementById('phoneInput').value = '';
+      }
+    }
+
+    function changeLanguage() {
+      const lang = document.getElementById('languageSelect').value;
+      const titles = {
+        ru: 'Ремонт компьютеров',
+        uk: 'Ремонт комп'ютерів',
+        en: 'Computer Repair',
+        pl: 'Naprawa komputerów'
+      };
+      const welcomes = {
+        ru: 'Добро пожаловать в наш сервис',
+        uk: 'Ласкаво просимо до нашого сервісу',
+        en: 'Welcome to Our Service',
+        pl: 'Witamy w naszym serwisie'
+      };
+      document.getElementById('title').textContent = titles[lang];
+      document.getElementById('welcomeText').textContent = welcomes[lang];
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const phone = params.get('phone');
+      const message = params.get('message');
+
+      if (phone) document.getElementById('phoneInput').value = decodeURIComponent(phone);
+      if (message) document.getElementById('commentInput').value = decodeURIComponent(message);
+    });
+  </script>
+</body>
+</html>
